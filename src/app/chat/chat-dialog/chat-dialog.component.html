@@ -1,0 +1,74 @@
+<section id="demo">
+  <div class="vertical-align">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-xs-offset-0">
+          <div class="card no-border">
+            <div id="chat" class="conv-form-wrapper">
+              <div class="wrapper-messages" style="margin-bottom: 0px; max-height: 475px;">
+                <div id="messages">
+                  <div *ngFor="let message of messages; let i = index">
+                      <div class="message ready"
+                      [ngClass]="{' from':message.sentBy === 'user','to':message.sentBy === 'bot'}"
+                      *ngFor="let content of message.content">
+                        <span [ngSwitch]="content.type">
+                          <div class="speech" *ngSwitchCase="0">
+                              {{content.speech}}
+                          </div>
+                          <div class="speech" *ngSwitchCase="1">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top-center" src="{{content.imageUrl}}">
+                              <div class="card-body">
+                                <h5 class="card-title">{{content.title}}</h5>
+                                <p class="card-text">{{content.subtitle}}</p>
+                                <div *ngFor="let button of content.buttons">
+                                    <a href="{{button.postback}}" target="_blank" class="btn btn-primary">{{button.text}}</a>
+                                </div>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          <div class="scrollbutton" *ngSwitchCase="2">
+                              <span *ngFor="let replie of content.replies">
+                                <button (click)="sendMessageSelected(replie,i)" class="btn btn-secondary">
+                                  {{replie}}
+                                </button>
+                              </span>
+                          </div>
+                          <div class="botimage" *ngSwitchCase="3">
+                            <img src="{{content.imageUrl}}" width="100%" />  
+                          </div>
+                          <div class="speech" *ngSwitchCase="4">
+                              {{content.data | json}}
+                          </div>
+                          <div class="speech" *ngSwitchCase="-1">
+                            <div class="loading">
+                              <div class="loading-bar"></div>
+                              <div class="loading-bar"></div>
+                              <div class="loading-bar"></div>
+                              <div class="loading-bar"></div>
+                            </div>
+                          </div>
+                          <div class="speech" *ngSwitchDefault>
+                          
+                          </div>
+                        </span>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div id="convForm" class="convFormDynamic">
+                <div class="options dragscroll"></div>
+                <textarea id="userInput" rows="1" placeholder="Type your message here..." class="userInputDynamic"
+                  [(ngModel)]="formValue" (keyup.enter)="sendMessage()"
+                  style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 32px;"></textarea>
+                <button type="button" class="submit" (click)="sendMessage()">▶</button>
+                <span class="clear"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
